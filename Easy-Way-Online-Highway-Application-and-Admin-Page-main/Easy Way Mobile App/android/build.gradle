@@ -1,0 +1,30 @@
+buildscript {
+    ext.kotlin_version = '1.8.22'  // Define Kotlin version (bumped to satisfy Flutter/AGP requirements)
+    repositories {
+        google()    // Google Maven repository for Firebase and other Google dependencies
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"  // Kotlin plugin
+        classpath 'com.google.gms:google-services:4.3.15'  // Google Services plugin
+    }
+}
+
+allprojects {
+    repositories {
+        google()    // Google Maven repository for Firebase dependencies
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")  // Ensures that all projects depend on the `:app` project
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir  // Clean task to remove build files
+}
