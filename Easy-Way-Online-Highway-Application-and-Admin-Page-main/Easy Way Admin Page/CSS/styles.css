@@ -5,7 +5,7 @@
 }
 
 body {
-    background: url('/lib/Admin/Admin_WEB/Images/bg.jpg') no-repeat center center fixed;
+    background: url('../Images/bg.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #FFB84D;
     font-family: "Poppins", sans-serif;
@@ -32,6 +32,7 @@ body {
     font-weight: 700;
     margin-bottom: 700px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding-top: 50px;
 }
 
 .shape {

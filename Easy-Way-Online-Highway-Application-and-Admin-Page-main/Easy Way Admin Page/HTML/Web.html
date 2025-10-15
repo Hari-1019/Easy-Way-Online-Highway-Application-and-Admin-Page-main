@@ -4,8 +4,13 @@
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EasyWay - Admin Login</title>
-  <link rel="stylesheet" href="/Easy-Way-Online-Highway-Application-and-Admin-Page-main/Easy Way Admin Page/CSS/styles.css">
-  <script type="module" src="/Easy-Way-Online-Highway-Application-and-Admin-Page-main/Easy Way Admin Page/JS/login.js" defer></script>
+  <link rel="stylesheet" href="../CSS/styles.css">
+  
+  <!-- Firebase v8 SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  
+  <script src="../JS/login-new.js" defer></script>
 </head>
 <body>
   <div class="background">
@@ -16,14 +21,25 @@
 
   <form id="loginForm">
     <h2>Admin Login</h2>
+    <p class="login-subtitle"></p>
 
-    <label for="email">Username:</label>
-    <input type="email" id="email" placeholder="Email" required>
+    <div class="input-group">
+      <label for="email">Administrator Email:</label>
+      <input type="email" id="email" placeholder="Enter email" required>
+    </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" placeholder="Password" required>
+    <div class="input-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+    </div>
 
-    <button type="submit" id="submit">Login</button>
+    <button type="submit" id="submit"> Secure Login</button>
+    
+    
+  </form>
+</body>
+</html>
+    </div>
   </form>
 </body>
 </html>
