@@ -118,6 +118,13 @@ class HomeContent extends StatelessWidget {
       ),
       onPressed: () {
         if (title == "Vehicle Registrations") {
+        } else if (title == "Services") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ServicePage(),
+            ),
+          );
         }
       },
       child: Column(
