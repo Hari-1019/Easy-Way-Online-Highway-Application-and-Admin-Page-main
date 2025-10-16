@@ -118,33 +118,6 @@ class HomeContent extends StatelessWidget {
       ),
       onPressed: () {
         if (title == "Vehicle Registrations") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const VehicleRegisterPage()),
-          );
-        } else if (title == "Ordering") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ShoppingCenterPage(),
-            ),
-          );
-        } else if (title == "Road Map") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NormalMapPage(
-                qrCode: '',
-              ),
-            ),
-          );
-        } else if (title == "Services") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ServicePage(),
-            ),
-          );
         }
       },
       child: Column(
