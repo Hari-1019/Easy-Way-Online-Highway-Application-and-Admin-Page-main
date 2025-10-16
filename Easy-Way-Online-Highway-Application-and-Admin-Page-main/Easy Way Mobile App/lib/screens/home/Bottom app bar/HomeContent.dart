@@ -116,8 +116,28 @@ class HomeContent extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.all(20),
       ),
-      onPressed: () {
+     onPressed: () {
         if (title == "Vehicle Registrations") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const VehicleRegisterPage()),
+          );
+        } else if (title == "Ordering") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ShoppingCenterPage(),
+            ),
+          );
+        } else if (title == "Road Map") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NormalMapPage(
+                qrCode: '',
+              ),
+            ),
+          );
         } else if (title == "Services") {
           Navigator.push(
             context,
@@ -125,6 +145,7 @@ class HomeContent extends StatelessWidget {
               builder: (context) => const ServicePage(),
             ),
           );
+
         }
       },
       child: Column(
