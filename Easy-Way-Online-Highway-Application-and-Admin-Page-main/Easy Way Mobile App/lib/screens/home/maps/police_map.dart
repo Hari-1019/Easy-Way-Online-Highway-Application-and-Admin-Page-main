@@ -2,7 +2,6 @@ import 'package:firebase/screens/home/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase/screens/home/home.dart';
 import 'package:firebase/screens/home/maps/location_provider.dart';
 
 class PoliceMapPage extends StatefulWidget {
@@ -15,7 +14,7 @@ class PoliceMapPage extends StatefulWidget {
 }
 
 class _PoliceMapPageState extends State<PoliceMapPage> {
-  late GoogleMapController _controller;
+  // controller not required
 
   // List of police station locations in Sri Lanka (example coordinates)
   final Set<Marker> _markers = {};
@@ -58,11 +57,7 @@ class _PoliceMapPageState extends State<PoliceMapPage> {
     // Add more stations as needed...
   }
 
-  void _centerMapOnUserLocation(LocationProvider locationProvider) {
-    _controller.animateCamera(
-      CameraUpdate.newLatLng(locationProvider.locationPosition),
-    );
-    }
+  // Centering helper removed; not referenced.
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +93,7 @@ class _PoliceMapPageState extends State<PoliceMapPage> {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
+                onMapCreated: (_) {},
                 markers: _markers, // Display the police station markers
               ),
             ),

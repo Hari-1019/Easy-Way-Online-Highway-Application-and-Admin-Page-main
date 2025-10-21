@@ -18,7 +18,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late GoogleMapController _controller;
+  // controller not required
 
   @override
   void initState() {
@@ -65,9 +65,7 @@ class _MapPageState extends State<MapPage> {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
+                onMapCreated: (_) {},
               ),
             ),
             // Next Button

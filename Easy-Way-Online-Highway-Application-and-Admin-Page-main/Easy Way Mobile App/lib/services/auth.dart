@@ -43,7 +43,7 @@ class AuthServices{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
 
-      final snapshot = await users.child(user!.uid).set({
+      await users.child(user!.uid).set({
         'name': '',
         'email': email,
         'phone': '',

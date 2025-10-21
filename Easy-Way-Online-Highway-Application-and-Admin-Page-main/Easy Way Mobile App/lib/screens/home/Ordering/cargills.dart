@@ -1,7 +1,5 @@
 import 'package:firebase/screens/home/Ordering/add_cart.dart';
 import 'package:firebase/screens/home/Ordering/shop.dart';
-import 'package:firebase/screens/home/home.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class CargillsOrderPage extends StatefulWidget {
