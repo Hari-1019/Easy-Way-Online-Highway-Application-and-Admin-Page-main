@@ -5,6 +5,7 @@ class AdminDashboard {
         this.usersData = {};
         this.paymentsData = {};
         this.vehiclesData = {};
+        this.emergencyAlerts = {};
         
         this.init();
     }
@@ -86,7 +87,8 @@ class AdminDashboard {
             await Promise.all([
                 this.loadUsers(),
                 this.loadPayments(), 
-                this.loadVehicles()
+                this.loadVehicles(),
+                this.loadEmergencyAlerts()
             ]);
             
             console.log('📊 All data loaded, updating statistics...');
@@ -139,6 +141,114 @@ class AdminDashboard {
             console.error('Error loading vehicles:', error);
             this.vehiclesData = {};
         }
+    }
+
+    async loadEmergencyAlerts() {
+        try {
+            const alertsRef = firebase.database().ref('emergency_alerts');
+            const snapshot = await alertsRef.once('value');
+            this.emergencyAlerts = snapshot.val() || {};
+            console.log('🚨 Loaded emergency alerts:', Object.keys(this.emergencyAlerts).length);
+            
+            // Render emergency alerts immediately
+            this.renderEmergencyAlerts();
+        } catch (error) {
+            console.error('Error loading emergency alerts:', error);
+            this.emergencyAlerts = {};
+        }
+    }
+
+    renderEmergencyAlerts() {
+        const container = document.getElementById('emergency-alerts-container');
+        if (!container) return;
+
+        const alertsArray = Object.keys(this.emergencyAlerts).map(key => ({
+            id: key,
+            ...this.emergencyAlerts[key]
+        }));
+
+        const activeAlerts = alertsArray.filter(alert => alert.status === 'active');
+        const todayAlerts = alertsArray.filter(alert => {
+            const alertDate = new Date(alert.timestamp);
+            const today = new Date();
+            return alertDate.toDateString() === today.toDateString();
+        });
+
+        // Update statistics
+        document.getElementById('activeAlertsCount').textContent = activeAlerts.length;
+        document.getElementById('todayAlertsCount').textContent = todayAlerts.length;
+        document.getElementById('resolvedAlertsCount').textContent = alertsArray.filter(alert => alert.status === 'resolved').length;
+
+        if (activeAlerts.length === 0) {
+            container.innerHTML = `
+                <div class="no-alerts">
+                    <div class="no-alerts-icon">✅</div>
+                    <h3>No Active Emergency Alerts</h3>
+                    <p>All clear! No emergency situations reported.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="emergency-alerts-list">
+                ${activeAlerts.map(alert => `
+                    <div class="emergency-alert active" data-alert-id="${alert.id}">
+                        <div class="alert-header">
+                            <span class="alert-status">🚨 ACTIVE EMERGENCY</span>
+                            <span class="alert-time">${new Date(alert.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-user-info">
+                                <h4>👤 ${alert.user_name || 'Unknown User'}</h4>
+                                <p>📧 ${alert.user_email || 'No email'}</p>
+                                <p>📱 ${alert.user_phone || 'No phone'}</p>
+                                <p>🏠 ${alert.user_address || 'No address'}</p>
+                            </div>
+                            <div class="alert-location-info">
+                                <h4>📍 Location Details</h4>
+                                <p><strong>Coordinates:</strong> ${alert.latitude}, ${alert.longitude}</p>
+                                <p><strong>Accuracy:</strong> ±${alert.location_accuracy}m</p>
+                                <p><strong>Altitude:</strong> ${alert.altitude}m</p>
+                                <p><strong>Speed:</strong> ${alert.speed} km/h</p>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button onclick="adminDashboard.viewOnMap('${alert.latitude}', '${alert.longitude}')" class="btn-map">
+                                🗺️ View on Map
+                            </button>
+                            <button onclick="adminDashboard.markAlertResolved('${alert.id}')" class="btn-resolve">
+                                ✅ Mark Resolved
+                            </button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    async markAlertResolved(alertId) {
+        try {
+            await firebase.database().ref(`emergency_alerts/${alertId}`).update({
+                status: 'resolved',
+                resolved_at: new Date().toISOString(),
+                resolved_by: sessionStorage.getItem('adminEmail')
+            });
+            
+            console.log(`✅ Emergency alert ${alertId} marked as resolved`);
+            await this.loadEmergencyAlerts(); // Refresh the list
+            
+            // Show success message
+            alert('✅ Emergency alert has been marked as resolved!');
+        } catch (error) {
+            console.error('❌ Error resolving alert:', error);
+            alert('❌ Error resolving alert. Please try again.');
+        }
+    }
+
+    viewOnMap(latitude, longitude) {
+        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
+        window.open(mapUrl, '_blank');
     }
 
     updateStatistics() {

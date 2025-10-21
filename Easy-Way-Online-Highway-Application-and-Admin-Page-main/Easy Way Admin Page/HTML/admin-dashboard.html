@@ -24,6 +24,7 @@
 
         <!-- Navigation Tabs -->
         <nav class="nav-tabs">
+            <button class="tab-btn emergency-tab" data-tab="emergency">Emergency</button>
             <button class="tab-btn active" data-tab="users">Users</button>
             <button class="tab-btn" data-tab="payments">Payments</button>
             <button class="tab-btn" data-tab="vehicles">Vehicles</button>
@@ -34,10 +35,35 @@
         <!-- Main Content -->
         <main class="dashboard-main">
             
+            <!-- Emergency Tab -->
+            <div id="emergency-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Emergency Management</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card emergency-active">
+                            <h3 id="activeAlertsCount">0</h3>
+                            <p>Active Alerts</p>
+                        </div>
+                        <div class="stat-card emergency-today">
+                            <h3 id="todayAlertsCount">0</h3>
+                            <p>Alerts Today</p>
+                        </div>
+                        <div class="stat-card emergency-resolved">
+                            <h3 id="resolvedAlertsCount">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="emergency-alerts-container">
+                    <!-- Emergency alerts will be loaded here -->
+                </div>
+            </div>
+            
             <!-- Users Tab -->
             <div id="users-tab" class="tab-content active">
                 <div class="content-header">
-                    <h2>👥 User Management</h2>
+                    <h2>User Management</h2>
                     <div class="stats-cards">
                         <div class="stat-card">
                             <h3 id="totalUsers">0</h3>
@@ -110,7 +136,7 @@
             <!-- Vehicles Tab -->
             <div id="vehicles-tab" class="tab-content">
                 <div class="content-header">
-                    <h2>🚗 Vehicle Registration</h2>
+                    <h2>Vehicle Registration</h2>
                     <div class="stats-cards">
                         <div class="stat-card">
                             <h3 id="totalVehicles">0</h3>
