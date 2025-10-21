@@ -14,7 +14,6 @@ class NormalMapPage extends StatefulWidget {
 }
 
 class _NormalMapPageState extends State<NormalMapPage> {
-  late GoogleMapController _controller;
 
   @override
   void initState() {
@@ -25,11 +24,7 @@ class _NormalMapPageState extends State<NormalMapPage> {
     });
   }
 
-  void _centerMapOnUserLocation(LocationProvider locationProvider) {
-    _controller.animateCamera(
-      CameraUpdate.newLatLng(locationProvider.locationPosition),
-    );
-    }
+  // Centering helper removed; not referenced.
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +60,7 @@ class _NormalMapPageState extends State<NormalMapPage> {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
+                onMapCreated: (_) {},
               ),
             ),
           ],

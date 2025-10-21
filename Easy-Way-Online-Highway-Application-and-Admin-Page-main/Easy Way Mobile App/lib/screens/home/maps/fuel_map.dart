@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:firebase/screens/home/home.dart';
 import 'package:firebase/screens/home/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,8 +14,6 @@ class FuelMapPage extends StatefulWidget {
 }
 
 class _FuelMapPageState extends State<FuelMapPage> {
-  late GoogleMapController _controller;
-
   // List of fuel stations and service areas across Sri Lanka
   final List<LatLng> _fuelStationsAndServiceAreas = [
     // Southern Expressway (E01)
@@ -69,11 +64,7 @@ class _FuelMapPageState extends State<FuelMapPage> {
     });
   }
 
-  void _centerMapOnUserLocation(LocationProvider locationProvider) {
-    _controller.animateCamera(
-      CameraUpdate.newLatLng(locationProvider.locationPosition),
-    );
-    }
+  // Centering helper removed; not referenced in current UI.
 
   @override
   Widget build(BuildContext context) {
@@ -114,8 +105,7 @@ class _FuelMapPageState extends State<FuelMapPage> {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
+                onMapCreated: (_) {
                   _addFuelStationMarkers(); // Add fuel station markers
                 },
                 markers: _createMarkers(), // Add markers

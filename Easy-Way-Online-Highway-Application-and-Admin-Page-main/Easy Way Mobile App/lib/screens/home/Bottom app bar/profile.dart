@@ -83,12 +83,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-void showSnackbar(String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message)),
-  );
-}
-
+  void showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   Future<void> saveProfileData() async {
     setState(() {
@@ -96,18 +95,26 @@ void showSnackbar(String message) {
     });
 
     try {
-      await _databaseReference.set({
+      final userId = _authServices.userID;
+      if (userId.isEmpty) {
+        showSnackbar('User not logged in');
+        return;
+      }
+
+      await userRef.set({
         'name': name,
         'email': email,
         'phone': phone,
         'address': address,
       });
+
       setState(() {
         isProfileSaved = true;
       });
-      print('Profile Data Saved');
+
+      showSnackbar('Profile saved successfully');
     } catch (e) {
-      print('Error saving profile data: $e');
+      showSnackbar('Error saving profile: $e');
     } finally {
       setState(() {
         isLoading = false;
@@ -121,20 +128,15 @@ void showSnackbar(String message) {
     });
 
     try {
-      await _databaseReference.child(_authServices.userID).update({
+      await userRef.update({
         'name': name,
-        'email': email,
         'phone': phone,
         'address': address,
       });
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile Data Updated')),
-      );
+
+      showSnackbar('Profile updated successfully');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating profile data: $e')),
-      );
+      showSnackbar('Error updating profile: $e');
     } finally {
       setState(() {
         isLoading = false;

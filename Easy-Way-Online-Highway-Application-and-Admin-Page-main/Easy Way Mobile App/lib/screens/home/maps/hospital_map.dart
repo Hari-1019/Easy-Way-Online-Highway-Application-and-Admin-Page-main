@@ -1,4 +1,3 @@
-import 'package:firebase/screens/home/home.dart';
 import 'package:firebase/screens/home/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,7 +14,7 @@ class HospitalMapPage extends StatefulWidget {
 }
 
 class _HospitalMapPageState extends State<HospitalMapPage> {
-  late GoogleMapController _controller;
+  // controller not required in current usage
 
   // List of hospitals and highway hospitals in Sri Lanka
   final List<LatLng> _hospitals = [
@@ -36,11 +35,7 @@ class _HospitalMapPageState extends State<HospitalMapPage> {
     });
   }
 
-  void _centerMapOnUserLocation(LocationProvider locationProvider) {
-    _controller.animateCamera(
-      CameraUpdate.newLatLng(locationProvider.locationPosition),
-    );
-    }
+  // Centering helper removed; not referenced.
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +74,7 @@ class _HospitalMapPageState extends State<HospitalMapPage> {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
+                onMapCreated: (_) {},
                 markers: _createHospitalMarkers(), // Add hospital markers
               ),
             ),

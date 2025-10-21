@@ -1,4 +1,3 @@
-import 'package:firebase/screens/QR%20code%20Scanner/scan_code_page.dart';
 import 'package:firebase/screens/home/Bottom%20app%20bar/HomeContent.dart';
 import 'package:firebase/screens/home/Navigation%20bar/my_profile_details.dart';
 import 'package:firebase/screens/home/Navigation%20bar/paymet_history.dart';
@@ -7,17 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase/screens/authentication/sign_in.dart';
-import 'package:firebase/screens/home/Paymnts.dart';
 import 'package:firebase/screens/home/Bottom%20app%20bar/weather.dart';
-import 'package:firebase/screens/home/maps/normal_map.dart';
 import 'package:firebase/screens/home/Bottom%20app%20bar/notification.dart';
 import 'package:firebase/screens/home/Bottom%20app%20bar/profile.dart';
-import 'package:firebase/screens/home/services.dart';
 import 'package:firebase/screens/home/Navigation%20bar/settings.dart';
 import 'package:firebase/screens/home/Navigation%20bar/vehicle_details_page.dart';
-import 'package:firebase/screens/home/vehicle_register.dart';
-import 'package:firebase/screens/home/Ordering/cargills.dart';
-import 'package:firebase/screens/home/Ordering/shop.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,14 +21,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-  late DatabaseReference _userRef;
   final AuthServices _auth = AuthServices();
-
-  @override
-  void initState() {
-    super.initState();
-    _userRef = FirebaseDatabase.instance.ref().child('user_profile'); // Reference to the 'users' node
-  }
 
   Future<String> _getUserName() async {
     // Get the current user from Firebase Authentication
