@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyWay - Admin Dashboard</title>
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>EasyWay Admin Dashboard</h1>
+                <div class="admin-info">
+                    <span id="adminEmail">Loading...</span>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn emergency-tab" data-tab="emergency">Emergency</button>
+            <button class="tab-btn active" data-tab="users">Users</button>
+            <button class="tab-btn" data-tab="payments">Payments</button>
+            <button class="tab-btn" data-tab="vehicles">Vehicles</button>
+            
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            
+            <!-- Emergency Tab -->
+            <div id="emergency-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Emergency Management</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card emergency-active">
+                            <h3 id="activeAlertsCount">0</h3>
+                            <p>Active Alerts</p>
+                        </div>
+                        <div class="stat-card emergency-today">
+                            <h3 id="todayAlertsCount">0</h3>
+                            <p>Alerts Today</p>
+                        </div>
+                        <div class="stat-card emergency-resolved">
+                            <h3 id="resolvedAlertsCount">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="emergency-alerts-container">
+                    <!-- Emergency alerts will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content active">
+                <div class="content-header">
+                    <h2>User Management</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="activeUsers">0</h3>
+                            <p>Active Today</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Registration Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payments Tab -->
+            <div id="payments-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>💳 Payment History</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h3 id="totalRevenue">LKR 0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="todayRevenue">LKR 0</h3>
+                            <p>Today's Revenue</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>User Email</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody">
+                            <!-- Payments will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Vehicles Tab -->
+            <div id="vehicles-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Vehicle Registration</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h3 id="totalVehicles">0</h3>
+                            <p>Registered Vehicles</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="activeVehicles">0</h3>
+                            <p>Active Vehicles</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>License Plate</th>
+                                <th>Owner</th>
+                                <th>User Email</th>
+                                <th>Vehicle Type</th>
+                                <th>Model</th>
+                                <th>Registration Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehiclesTableBody">
+                            <!-- Vehicles will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>System Settings</h2>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>Admin Management</h3>
+                        <button id="addAdminBtn" class="action-btn">Add New Admin</button>
+                        <button id="manageAdminsBtn" class="action-btn">Manage Admins</button>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>Data Management</h3>
+                        <button id="exportDataBtn" class="action-btn">Export Data</button>
+                        <button id="backupBtn" class="action-btn">Backup Database</button>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>Notifications</h3>
+                        <button id="emailSettingsBtn" class="action-btn">Email Settings</button>
+                        <button id="alertsBtn" class="action-btn">Alert Configuration</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading dashboard data...</p>
+    </div>
+
+    <!-- Modal for Admin Registration -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Admin</h2>
+            <form id="adminRegistrationForm">
+                <div class="form-group">
+                    <label for="adminName">Full Name:</label>
+                    <input type="text" id="adminName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminEmailNew">Email:</label>
+                    <input type="email" id="adminEmailNew" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminRole">Role:</label>
+                    <select id="adminRole" required>
+                        <option value="admin">Admin</option>
+                        <option value="super_admin">Super Admin</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Create Admin Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../JS/firebase-config.js"></script>
+    <script src="../JS/dashboard.js"></script>
+</body>
+</html>
