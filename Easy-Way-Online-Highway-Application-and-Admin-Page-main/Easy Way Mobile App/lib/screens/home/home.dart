@@ -87,6 +87,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[900]!,
+        elevation: 0,
         leading: Builder(
           builder: (context) {
             return IconButton(
@@ -97,43 +98,48 @@ class _HomeState extends State<Home> {
             );
           },
         ),
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start, // Aligns the title to the left
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Easy Way",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
-                fontSize: 30,
+                fontSize: 24,
               ),
             ),
-          ],
-        ),
-        centerTitle: true,
-        actions: [
-          // Display greeting text at the top right corner
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: FutureBuilder<String>(
+            FutureBuilder<String>(
               future: _getUserName(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return Container(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  );
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text('Error');
                 } else if (!snapshot.hasData) {
-                  return const Text('No user data');
+                  return const Text('No user');
                 } else {
                   return Text(
                     '${_getGreeting()}, ${snapshot.data!}',
-                    style: const TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold,),
+                    style: const TextStyle(
+                      color: Colors.white, 
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   );
                 }
               },
             ),
-          ),
-        ],
+          ],
+        ),
+        centerTitle: false,
       ),
       drawer: Drawer(
         child: FutureBuilder<String>(
