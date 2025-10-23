@@ -80,3 +80,32 @@ class NotificationModel {
     required this.timestamp,
   });
 }
+
+class NotificationCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final String timestamp;
+
+  const NotificationCard({
+    Key? key,
+    required this.title,
+    required this.description,
+    required this.timestamp,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(description),
+        trailing: Text(
+          timestamp,
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+      ),
+    );
+  }
+}
