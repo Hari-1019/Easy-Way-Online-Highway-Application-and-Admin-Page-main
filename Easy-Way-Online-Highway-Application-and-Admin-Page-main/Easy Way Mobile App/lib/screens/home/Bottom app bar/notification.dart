@@ -69,54 +69,6 @@ class NotificationsPage extends StatelessWidget {
     );
   }
 }
-
-class NotificationCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String timestamp;
-
-  const NotificationCard({super.key, 
-    required this.title,
-    required this.description,
-    required this.timestamp,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      elevation: 3.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16.0),
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              description,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              timestamp,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-        trailing: const Icon(
-          Icons.notifications,
-          color: Colors.orange,
-        ),
-      ),
-    );
-  }
-}
-
-// Model Class for Notification
 class NotificationModel {
   final String title;
   final String description;
