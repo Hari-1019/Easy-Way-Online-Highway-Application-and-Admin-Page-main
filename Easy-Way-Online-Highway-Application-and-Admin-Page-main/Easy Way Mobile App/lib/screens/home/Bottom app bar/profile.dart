@@ -13,13 +13,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   // ignore: non_constant_identifier_names
   String user_id = '';
-  String name = '';
-  String email = '';
-  String phone = '';
-  String address = '';
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   bool isProfileSaved = false;
   bool isLoading = false;
   final AuthServices _authServices = AuthServices();
@@ -35,8 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
         .child('user_profile')
         .child(_authServices.userID);
     _databaseReference = FirebaseDatabase.instance.ref("user_profile");
-        fetchCurrentUser();
-        fetchUserData();
+  fetchCurrentUser();
+  fetchUserData();
         profileExists().then((exists) {
           setState(() {
             isProfileSaved = exists;
@@ -49,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         setState(() {
-          email = currentUser.email ?? '';
+          _emailController.text = currentUser.email ?? '';
         });
       } else {
         print('No user is logged in.');
@@ -71,9 +70,9 @@ class _ProfilePageState extends State<ProfilePage> {
       final Map<String, dynamic> userData =
           Map<String, dynamic>.from(event.snapshot.value as Map);
       setState(() {
-        name = userData['name'] ?? 'N/A';
-        phone = userData['phone'] ?? 'N/A';
-        address = userData['address'] ?? 'N/A';
+        _nameController.text = userData['name'] ?? '';
+        _phoneController.text = userData['phone'] ?? '';
+        _addressController.text = userData['address'] ?? '';
       });
     } else {
       showSnackbar('User profile not found.');
@@ -102,10 +101,10 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       await userRef.set({
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'address': address,
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'address': _addressController.text,
       });
 
       setState(() {
@@ -129,9 +128,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
     try {
       await userRef.update({
-        'name': name,
-        'phone': phone,
-        'address': address,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'address': _addressController.text,
       });
 
       showSnackbar('Profile updated successfully');
@@ -145,7 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override 
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -153,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0,
       ),
       body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 50),
+        padding: const EdgeInsets.only(top: 40),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -165,13 +166,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: 0),
                 const Center(
                   child: CircleAvatar(
                     radius: 55,
@@ -180,12 +181,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 buildTextFormField(
                   label: "Name",
                   isReadOnly: false,
-                  initialValue: name,
-                  onChanged: (value) => name = value,
+                  controller: _nameController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
@@ -193,12 +193,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 buildTextFormField(
                   isReadOnly: true,
                   label: "Email",
-                  initialValue: email,
-                  onChanged: (value) => email = value,
+                  controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -206,12 +205,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 buildTextFormField(
                   isReadOnly: false,
                   label: "Phone Number",
-                  initialValue: phone,
-                  onChanged: (value) => phone = value,
+                  controller: _phoneController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your phone number';
@@ -221,12 +219,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 buildTextFormField(
                   isReadOnly: false,
                   label: "Address",
-                  initialValue: address,
-                  onChanged: (value) => address = value,
+                  controller: _addressController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your address';
@@ -234,16 +231,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 40),
-                Container(
-                  height: 50,
+                const SizedBox(height: 28),
+                SizedBox(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 50),
-                  decoration: BoxDecoration(
-                    color: Colors.orange[900],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextButton(
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange[900],
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                     onPressed: isLoading
                         ? null
                         : () {
@@ -255,18 +253,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               }
                             }
                           },
-                    child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            isProfileSaved
-                                ? "Update Profile"
-                                : "Save Changes",
-                            style: const TextStyle(
+                    icon: isLoading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              strokeWidth: 2,
                             ),
-                          ),
+                          )
+                        : Icon(isProfileSaved ? Icons.update : Icons.save),
+                    label: Text(
+                      isProfileSaved ? 'Update Profile' : 'Save Changes',
+                      style: (theme.textTheme.labelLarge ?? const TextStyle()).copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -280,14 +284,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildTextFormField({
     required String label,
-    required Function(String) onChanged,
     required String? Function(String?) validator,
     required bool isReadOnly,
-    String? initialValue,
+    TextEditingController? controller,
   }) {
     return TextFormField(
       readOnly: isReadOnly,
-      initialValue: initialValue,
+      controller: controller,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
@@ -300,8 +303,16 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         border: const OutlineInputBorder(),
       ),
-      onChanged: onChanged,
       validator: validator,
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    super.dispose();
   }
 }

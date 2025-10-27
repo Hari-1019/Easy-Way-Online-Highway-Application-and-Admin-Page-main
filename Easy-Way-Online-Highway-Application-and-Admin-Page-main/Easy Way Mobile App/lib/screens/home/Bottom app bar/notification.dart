@@ -99,8 +99,12 @@ class NotificationCard extends StatelessWidget {
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.orange[100],
+          child: Icon(Icons.notifications, color: Colors.orange[800]),
+        ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(description),
+        subtitle: Text(description, maxLines: 2, overflow: TextOverflow.ellipsis),
         trailing: Text(
           timestamp,
           style: const TextStyle(fontSize: 12, color: Colors.grey),
